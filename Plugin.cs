@@ -453,7 +453,7 @@ namespace DashUI
                 : new[] { $"{Screen.width}x{Screen.height}" };
 
             int idx = Mathf.Clamp(inst.ResolucaoIndexCfg.Value, 0, nomesRes.Length - 1);
-            int novoIdx = GUILayout.SelectionGrid(idx, nomesRes, 2, GUILayout.Height(52));
+            int novoIdx = GUILayout.SelectionGrid(idx, nomesRes, 2, GUI.skin.button, GUILayout.Height(52));
             if (novoIdx != idx)
             {
                 inst.ResolucaoIndexCfg.Value = novoIdx;
@@ -473,7 +473,7 @@ namespace DashUI
             GUILayout.Space(8);
             GUILayout.Label("Elemento UI", labelStyle);
             string[] els = { "Menus e janelas", "Botões", "Tablet Lobby", "Tablet Reunião", "Outros" };
-            int elSel = GUILayout.SelectionGrid((int)Plugin.ElementoSelecionado, els, 2, GUILayout.Height(66));
+            int elSel = GUILayout.SelectionGrid((int)Plugin.ElementoSelecionado, els, 2, GUI.skin.button, GUILayout.Height(66));
             Plugin.ElementoSelecionado = (Plugin.ElementoUI)elSel;
 
             var cur = Plugin.LayoutElementos[Plugin.ElementoSelecionado];
@@ -504,5 +504,4 @@ namespace DashUI
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Salvar", GUILayout.Height(28)))
                 Plugin.SalvarNotasNoDisco();
-            if (GUILayout.Button("Limpar", GUILayout.Height(28)))
-   
+            if (GUILayout.Button("L
