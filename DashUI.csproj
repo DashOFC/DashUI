@@ -17,9 +17,11 @@
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.3.31" PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="AddUnityEngineRefs" BeforeTargets="ResolveAssemblyReferences">
+  <Target Name="AddBepInExUnityRefs" BeforeTargets="ResolveAssemblyReferences">
     <ItemGroup>
-      <Reference Include="$(NuGetPackageRoot)amongus.gamelibs.steam/2025.3.31/lib/net6.0/UnityEngine*.dll" Condition="Exists('$(NuGetPackageRoot)amongus.gamelibs.steam/2025.3.31/lib/net6.0/')" />
+      <BepInExUnityDlls Include="$(NuGetPackageRoot)bepinex.unity.il2cpp/**/UnityEngine*.dll" />
+      <BepInExUnityDlls Include="$(NuGetPackageRoot)bepinex.unity.il2cpp/**/Il2Cpp*.dll" />
+      <Reference Include="@(BepInExUnityDlls)" />
     </ItemGroup>
   </Target>
 </Project>
