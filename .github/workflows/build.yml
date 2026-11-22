@@ -21,8 +21,10 @@ jobs:
       - name: Restore NuGet packages
         run: dotnet restore DashUI.csproj
 
-      - name: Check GameLibs files
-        run: find "$HOME/.nuget/packages/amongus.gamelibs.steam" -maxdepth 5 2>/dev/null || true
+      - name: Check NuGet DLLs
+        run: |
+          find "$HOME/.nuget/packages/amongus.gamelibs.steam" -name "*.dll" 2>/dev/null || echo "GameLibs DLLs nao encontradas"
+          find "$HOME/.nuget/packages/bepinex.unity.il2cpp" -name "*.dll" 2>/dev/null || echo "BepInEx DLLs nao encontradas"
 
       - name: Build DashUI.dll
         run: dotnet build DashUI.csproj -c Release --no-restore
