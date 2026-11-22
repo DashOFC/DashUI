@@ -17,8 +17,12 @@
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.3.31" PrivateAssets="all" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="bepinex_tmp/extracted/BepInEx/core/*.dll" Condition="Exists('bepinex_tmp/extracted/BepInEx/core/')" />
-    <Reference Include="bepinex_tmp/extracted/BepInEx/interop/*.dll" Condition="Exists('bepinex_tmp/extracted/BepInEx/interop/')" />
-  </ItemGroup>
+  <Target Name="AddUnityAndInteropRefs" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <NuGetUnityDlls Include="$(NuGetPackageRoot)**/UnityEngine*.dll" />
+      <NuGetInteropDlls Include="$(NuGetPackageRoot)**/Il2CppInterop*.dll" />
+      <Reference Include="@(NuGetUnityDlls)" Condition="'@(NuGetUnityDlls)' != ''" />
+      <Reference Include="@(NuGetInteropDlls)" Condition="'@(NuGetInteropDlls)' != ''" />
+    </ItemGroup>
+  </Target>
 </Project>
