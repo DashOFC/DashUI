@@ -256,36 +256,6 @@ namespace DashUI
             return t;
         }
 
-        private GUIStyle EstiloLabel(int tamanho, FontStyle estilo, Color cor, TextAnchor alinhamento = TextAnchor.UpperLeft)
-        {
-            var s = new GUIStyle(GUI.skin.label);
-            s.fontSize = tamanho;
-            s.fontStyle = estilo;
-            s.alignment = alinhamento;
-            s.normal.textColor = cor;
-            return s;
-        }
-
-        private GUIStyle EstiloBotao(int tamanho, Texture2D fundo, Color corTexto)
-        {
-            var s = new GUIStyle(GUI.skin.button);
-            s.fontSize = tamanho;
-            s.fontStyle = FontStyle.Bold;
-            s.normal.background = fundo;
-            s.normal.textColor = corTexto;
-            return s;
-        }
-
-        private GUIStyle EstiloToggle(int tamanho, Color corTexto)
-        {
-            var s = new GUIStyle(GUI.skin.toggle);
-            s.fontSize = tamanho;
-            s.fontStyle = FontStyle.Bold;
-            s.normal.textColor = corTexto;
-            s.onNormal.textColor = corTexto;
-            return s;
-        }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F1))
@@ -298,40 +268,32 @@ namespace DashUI
         {
             GarantirTexturas();
 
-            // 1. Contador numérico de tarefas no canto superior esquerdo (ex: 6/120)
+            // 1. Contador numérico de tarefas no canto superior esquerdo (ex: 6/120)[span_0](start_span)[span_0](end_span)
             if (Plugin.BarraTarefasPadraoAtiva() && Plugin.TarefasTotaisExibidas > 0)
             {
                 var est = Plugin.LayoutElementos[Plugin.ElementoUI.OutrosElementos];
                 Rect rTask = new Rect(18f + est.offset.x, 14f + est.offset.y, 130f * est.escala, 34f * est.escala);
                 GUI.DrawTexture(rTask, texBotaoEscuro);
-
-                var styleTask = EstiloLabel(Mathf.RoundToInt(18f * est.escala), FontStyle.Bold, Color.white, TextAnchor.MiddleCenter);
-                GUI.Label(rTask, $"✔ {Plugin.TarefasConcluidasExibidas}/{Plugin.TarefasTotaisExibidas}", styleTask);
+                GUI.Label(rTask, $"{Plugin.TarefasConcluidasExibidas}/{Plugin.TarefasTotaisExibidas}");
             }
 
             if (!Plugin.MenuAberto) return;
 
-            // 2. Janela central de Configurações
+            // 2. Janela central de Configurações[span_1](start_span)[span_1](end_span)
             float w = 440f;
             float h = 520f;
             Rect win = new Rect((Screen.width - w) * 0.5f, (Screen.height - h) * 0.5f, w, h);
 
             GUI.DrawTexture(win, texFundoJanela);
+            GUI.Label(new Rect(win.x + 22, win.y + 18, 220, 34), "Configurações");
 
-            GUI.Label(
-                new Rect(win.x + 22, win.y + 18, 220, 34),
-                "Configurações",
-                EstiloLabel(22, FontStyle.Bold, Color.white)
-            );
-
-            var btnOriginalStyle = EstiloBotao(11, texBotaoEscuro, new Color(0.85f, 0.87f, 0.9f));
-            if (GUI.Button(new Rect(win.x + w - 122, win.y + 20, 100, 26), "menu original", btnOriginalStyle))
+            if (GUI.Button(new Rect(win.x + w - 122, win.y + 20, 100, 26), "menu original"))
             {
                 Plugin.VoltarMenuOriginal();
                 return;
             }
 
-            // Abas: Geral, Tela, Chat, Partida
+            // Abas: Geral, Tela, Chat, Partida[span_2](start_span)[span_2](end_span)
             string[] abas = { "Geral", "Tela", "Chat", "Partida" };
             float tabW = 74f;
             float gap = 10f;
@@ -340,13 +302,7 @@ namespace DashUI
 
             for (int i = 0; i < abas.Length; i++)
             {
-                bool ativa = Plugin.AbaAtual == i;
-                var tabStyle = EstiloBotao(
-                    13,
-                    ativa ? texBotaoAtivo : texBotaoEscuro,
-                    ativa ? Color.black : Color.white
-                );
-                if (GUI.Button(new Rect(startTabX + i * (tabW + gap), tabY, tabW, 28), abas[i], tabStyle))
+                if (GUI.Button(new Rect(startTabX + i * (tabW + gap), tabY, tabW, 28), abas[i]))
                 {
                     Plugin.AbaAtual = i;
                 }
@@ -362,22 +318,18 @@ namespace DashUI
 
             GUILayout.EndArea();
 
-            // Botões inferiores: Voltar ao jogo | Sair da partida
+            // Botões inferiores: Voltar ao jogo | Sair da partida[span_3](start_span)[span_3](end_span)
             float footY = win.y + h - 56f;
-            var btnVoltar = EstiloBotao(14, texBotaoBranco, new Color(0.08f, 0.09f, 0.12f));
-            var btnSair = EstiloBotao(14, texBotaoVermelho, Color.white);
-
-            if (GUI.Button(new Rect(win.x + 22, footY, 188, 36), "Voltar ao jogo", btnVoltar))
+            if (GUI.Button(new Rect(win.x + 22, footY, 188, 36), "Voltar ao jogo"))
                 Plugin.MenuAberto = false;
 
-            if (GUI.Button(new Rect(win.x + w - 210, footY, 188, 36), "Sair da partida", btnSair))
+            if (GUI.Button(new Rect(win.x + w - 210, footY, 188, 36), "Sair da partida"))
                 Plugin.SairDaPartida();
         }
 
         private void DesenharSliderPorcentagem(string titulo, float valor, Action<float> onChange)
         {
-            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
-            GUILayout.Label(titulo, labelStyle);
+            GUILayout.Label(titulo);
             GUILayout.Space(4);
 
             GUILayout.BeginHorizontal();
@@ -385,7 +337,7 @@ namespace DashUI
             GUI.skin.horizontalSliderThumb.normal.background = texBotaoBranco;
             float novo = GUILayout.HorizontalSlider(valor, 0f, 1f, GUILayout.Height(18));
             GUILayout.Space(8);
-            GUILayout.Label($"{Mathf.RoundToInt(novo * 100f)}%", labelStyle, GUILayout.Width(48));
+            GUILayout.Label($"{Mathf.RoundToInt(novo * 100f)}%", GUILayout.Width(48));
             GUILayout.EndHorizontal();
 
             if (!Mathf.Approximately(novo, valor))
@@ -411,27 +363,23 @@ namespace DashUI
             });
 
             GUILayout.Space(12);
-            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
-            GUILayout.Label("Controle", labelStyle);
+            GUILayout.Label("Controle");
             GUILayout.Space(6);
 
             GUILayout.BeginHorizontal();
             string[] controles = { "Mouse", "Mouse e teclado" };
             for (int i = 0; i < controles.Length; i++)
             {
-                bool sel = inst.ModoControleCfg.Value == i;
-                var st = EstiloBotao(13, sel ? texBotaoAtivo : texBotaoBranco, new Color(0.08f, 0.09f, 0.12f));
-                if (GUILayout.Button(controles[i], st, GUILayout.Height(30)))
+                if (GUILayout.Button(controles[i], GUILayout.Height(30)))
                     inst.ModoControleCfg.Value = i;
             }
             GUILayout.EndHorizontal();
 
             GUILayout.Space(14);
-            var toggleStyle = EstiloToggle(14, Color.white);
-            inst.AndarComMouseCfg.Value = GUILayout.Toggle(inst.AndarComMouseCfg.Value, "  Andar com o mouse", toggleStyle);
+            inst.AndarComMouseCfg.Value = GUILayout.Toggle(inst.AndarComMouseCfg.Value, "  Andar com o mouse");
 
             GUILayout.Space(8);
-            bool novoConsole = GUILayout.Toggle(inst.ConsoleBepInExCfg.Value, "  Console do BepInEx (janela preta)", toggleStyle);
+            bool novoConsole = GUILayout.Toggle(inst.ConsoleBepInExCfg.Value, "  Console do BepInEx (janela preta)");
             if (novoConsole != inst.ConsoleBepInExCfg.Value)
             {
                 inst.ConsoleBepInExCfg.Value = novoConsole;
@@ -444,8 +392,7 @@ namespace DashUI
             var inst = Plugin.Instance;
             if (inst == null) return;
 
-            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
-            GUILayout.Label("Resolução", labelStyle);
+            GUILayout.Label("Resolução");
 
             var resList = Screen.resolutions;
             string[] nomesRes = resList.Length > 0
@@ -453,7 +400,7 @@ namespace DashUI
                 : new[] { $"{Screen.width}x{Screen.height}" };
 
             int idx = Mathf.Clamp(inst.ResolucaoIndexCfg.Value, 0, nomesRes.Length - 1);
-            int novoIdx = GUILayout.SelectionGrid(idx, nomesRes, 2, GUI.skin.button, GUILayout.Height(52));
+            int novoIdx = GUILayout.SelectionGrid(idx, nomesRes, 2, GUILayout.Height(52));
             if (novoIdx != idx)
             {
                 inst.ResolucaoIndexCfg.Value = novoIdx;
@@ -462,8 +409,7 @@ namespace DashUI
             }
 
             GUILayout.Space(8);
-            var toggleStyle = EstiloToggle(14, Color.white);
-            bool novoVsync = GUILayout.Toggle(inst.VSyncCfg.Value, "  VSync", toggleStyle);
+            bool novoVsync = GUILayout.Toggle(inst.VSyncCfg.Value, "  VSync");
             if (novoVsync != inst.VSyncCfg.Value)
             {
                 inst.VSyncCfg.Value = novoVsync;
@@ -471,9 +417,9 @@ namespace DashUI
             }
 
             GUILayout.Space(8);
-            GUILayout.Label("Elemento UI", labelStyle);
+            GUILayout.Label("Elemento UI");
             string[] els = { "Menus e janelas", "Botões", "Tablet Lobby", "Tablet Reunião", "Outros" };
-            int elSel = GUILayout.SelectionGrid((int)Plugin.ElementoSelecionado, els, 2, GUI.skin.button, GUILayout.Height(66));
+            int elSel = GUILayout.SelectionGrid((int)Plugin.ElementoSelecionado, els, 2, GUILayout.Height(66));
             Plugin.ElementoSelecionado = (Plugin.ElementoUI)elSel;
 
             var cur = Plugin.LayoutElementos[Plugin.ElementoSelecionado];
@@ -497,8 +443,7 @@ namespace DashUI
 
         private void DesenharChat()
         {
-            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
-            GUILayout.Label("Notas / Comandos rápidos", labelStyle);
+            GUILayout.Label("Notas / Comandos rápidos");
             Plugin.TextoNotas = GUILayout.TextArea(Plugin.TextoNotas ?? "", GUILayout.Height(180));
 
             GUILayout.BeginHorizontal();
@@ -514,14 +459,12 @@ namespace DashUI
             var inst = Plugin.Instance;
             if (inst == null) return;
 
-            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
-            GUILayout.Label("Contador de Tarefas", labelStyle);
+            GUILayout.Label("Contador de Tarefas");
             string[] modos = { "Em tempo real", "Apenas por reunião" };
             inst.ModoContadorCfg.Value = GUILayout.SelectionGrid(
                 inst.ModoContadorCfg.Value,
                 modos,
                 2,
-                GUI.skin.button,
                 GUILayout.Height(32)
             );
         }
