@@ -2,9 +2,7 @@ name: Build DashUI
 
 on:
   push:
-    branches: [ "**" ]
-  pull_request:
-    branches: [ "**" ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -12,23 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET 6.0
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: '6.0.x'
 
-      - name: Restore dependencies
+      - name: Restore NuGet packages
         run: dotnet restore DashUI.csproj
 
-      - name: Build Release
+      - name: Check GameLibs files
+        run: find "$HOME/.nuget/packages/amongus.gamelibs.steam" -maxdepth 5 2>/dev/null || true
+
+      - name: Build DashUI.dll
         run: dotnet build DashUI.csproj -c Release --no-restore
 
-      - name: Upload DashUI.dll artifact
+      - name: Upload DashUI.dll
         uses: actions/upload-artifact@v4
         with:
-          name: DashUI
+          name: DashUI-dll
           path: bin/Release/net6.0/DashUI.dll
-          if-no-files-found: error
+          
