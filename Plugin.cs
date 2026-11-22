@@ -504,4 +504,26 @@ namespace DashUI
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Salvar", GUILayout.Height(28)))
                 Plugin.SalvarNotasNoDisco();
-            if (GUILayout.Button("L
+            if (GUILayout.Button("Limpar", GUILayout.Height(28)))
+                Plugin.LimparNotas();
+            GUILayout.EndHorizontal();
+        }
+
+        private void DesenharPartida()
+        {
+            var inst = Plugin.Instance;
+            if (inst == null) return;
+
+            var labelStyle = EstiloLabel(14, FontStyle.Bold, Color.white);
+            GUILayout.Label("Contador de Tarefas", labelStyle);
+            string[] modos = { "Em tempo real", "Apenas por reunião" };
+            inst.ModoContadorCfg.Value = GUILayout.SelectionGrid(
+                inst.ModoContadorCfg.Value,
+                modos,
+                2,
+                GUI.skin.button,
+                GUILayout.Height(32)
+            );
+        }
+    }
+}
