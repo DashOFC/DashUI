@@ -2,7 +2,9 @@ name: Build DashUI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
   workflow_dispatch:
 
 jobs:
@@ -10,20 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET 6.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: "6.0.x"
 
-      - name: Build DashUI.dll
-        run: dotnet build DashUI.csproj -c Release
+      - name: Restore dependencies
+        run: dotnet restore DashUI.csproj
 
-      - name: Upload DashUI.dll
+      - name: Build Release
+        run: dotnet build DashUI.csproj -c Release --no-restore
+
+      - name: Upload DashUI.dll artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DashUI-dll
+          name: DashUI
           path: bin/Release/net6.0/DashUI.dll
-          
+          if-no-files-found: error
