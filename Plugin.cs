@@ -268,7 +268,7 @@ namespace DashUI
         {
             GarantirTexturas();
 
-            // 1. Contador numérico de tarefas no canto superior esquerdo (ex: 6/120)[span_0](start_span)[span_0](end_span)
+            // 1. Contador numérico de tarefas no canto superior esquerdo (ex: 6/120)
             if (Plugin.BarraTarefasPadraoAtiva() && Plugin.TarefasTotaisExibidas > 0)
             {
                 var est = Plugin.LayoutElementos[Plugin.ElementoUI.OutrosElementos];
@@ -279,7 +279,7 @@ namespace DashUI
 
             if (!Plugin.MenuAberto) return;
 
-            // 2. Janela central de Configurações[span_1](start_span)[span_1](end_span)
+            // 2. Janela central de Configurações
             float w = 440f;
             float h = 520f;
             Rect win = new Rect((Screen.width - w) * 0.5f, (Screen.height - h) * 0.5f, w, h);
@@ -293,7 +293,7 @@ namespace DashUI
                 return;
             }
 
-            // Abas: Geral, Tela, Chat, Partida[span_2](start_span)[span_2](end_span)
+            // Abas: Geral, Tela, Chat, Partida
             string[] abas = { "Geral", "Tela", "Chat", "Partida" };
             float tabW = 74f;
             float gap = 10f;
@@ -318,7 +318,7 @@ namespace DashUI
 
             GUILayout.EndArea();
 
-            // Botões inferiores: Voltar ao jogo | Sair da partida[span_3](start_span)[span_3](end_span)
+            // Botões inferiores: Voltar ao jogo | Sair da partida
             float footY = win.y + h - 56f;
             if (GUI.Button(new Rect(win.x + 22, footY, 188, 36), "Voltar ao jogo"))
                 Plugin.MenuAberto = false;
